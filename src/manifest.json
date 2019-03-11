@@ -27,13 +27,13 @@
     {
       "entityId": "com.it-labs.reminder.hellotab",
       "name": "Hello Tab",
-      "contentUrl": "https://11f8212a.ngrok.io/hello",
+      "contentUrl": "https://mighty-depths-84225.herokuapp.com/hello",
       "scopes": ["personal"]
     }
   ],
   "configurableTabs": [
     {
-      "configurationUrl": "https://11f8212a.ngrok.io/configure",
+      "configurationUrl": "https://mighty-depths-84225.herokuapp.com/configure",
       "canUpdateConfiguration": true,
       "scopes": ["team"]
     }
