@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Microsoft Teams Node.js Hello World App. Start here to build your first app on the Teams platform.",
   "scripts": {
-    "start": "node src/app.js",
-    "watch": "nodemon src/app.js",
+    "start": "ts-node src/app.ts",
+    "watch": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,9 +29,14 @@
     "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
+    "@types/express": "^4.16.1",
+    "@types/node": "^11.11.3",
+    "@types/node-schedule": "^1.2.3",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-zip": "^4.0.0",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.3333"
   }
 }
