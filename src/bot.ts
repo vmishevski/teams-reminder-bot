@@ -6,6 +6,7 @@ var config = require('config');
 import schedule, { Job, cancelJob } from 'node-schedule';
 import parseMessage from './message-parser';
 import setupReminder from './setup-reminder';
+import JobModel from './job-model';
 
 const { addSeconds, getDate, startOfTomorrow } = require('date-fns');
 
@@ -26,23 +27,30 @@ export const connector = new teams.TeamsChatConnector({
 
 var inMemoryBotStorage = new builder.MemoryBotStorage();
 
-var count = 0;
 // Define a simple bot with the above connector that echoes what it received
 var bot = new builder.UniversalBot(connector, function(session) {
   var messageText = teams.TeamsMessage.getTextWithoutMentions(session.message);
 
-  if (count % 2 === 0) {
-    session.send('Hi ' + session.message.address.user.name);
-  } else {
-    session.send(
-      'Nothing. Still waiting for Darko to complete the business requirement so that I can start reminding people'
-    );
+  if (messageText === 'list') {
+    const reminderJobs: JobModel[] = session.userData.jobs || [];
+
+    if (!reminderJobs.length) {
+      session.send(`I cannot find any reminders`);
+      return;
+    }
+
+    const allRemindersText = reminderJobs
+      .map(job => {
+        return `"${job.reminder.message}" - ${JSON.stringify(job.reminder.schedule)}`;
+      })
+      .join('\r\n');
+
+    session.send(`Here are your reminders:\r\n ${allRemindersText}`);
+    return;
   }
-  count++;
 
   if (messageText === 'clear') {
     const jobs = session.userData.jobs as string[];
-    console.log('saved jobs', jobs);
     if (jobs) {
       jobs.forEach(job => cancelJob(job));
       session.userData.jobs = [];
@@ -51,7 +59,11 @@ var bot = new builder.UniversalBot(connector, function(session) {
   }
 
   const parsedMessage = parseMessage(messageText);
-  console.log(parsedMessage);
+
+  if (!parsedMessage || !parsedMessage.message || !parsedMessage.schedule) {
+    session.send(`Sorry, I did not understood that.`);
+    return;
+  }
 
   setupReminder(bot, session, parsedMessage);
 }).set('storage', inMemoryBotStorage);
