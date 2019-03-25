@@ -6,7 +6,7 @@
     "start": "node dist/app.js",
     "start:dev": "ts-node src/app.ts",
     "watch": "nodemon",
-    "build": "tsc",
+    "build": "tsc && cp src/schedule-grammar.pegjs dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
