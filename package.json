@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Microsoft Teams Node.js Hello World App. Start here to build your first app on the Teams platform.",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node server.js",
     "start:dev": "ts-node src/app.ts",
     "watch": "nodemon",
     "build": "tsc && cp src/schedule-grammar.pegjs dist",
