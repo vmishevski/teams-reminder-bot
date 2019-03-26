@@ -43,7 +43,10 @@ export default function setupReminder(
     const job = scheduleJob(bot, cron, session, parsedReminder);
     storeJob(mapToJobModel(job, parsedReminder, session), session);
     session.send(
-      `Ok, I will remind you daily about '${parsedReminder.message}' at ${hour}:${minute}`
+      `Ok, I will remind you daily about '${parsedReminder.message}' at ${timeDisplay(
+        hour,
+        minute
+      )}`
     );
   } else if (schedule.recurrence === RecurrenceType.weekly) {
     const { hour, minute } = parseReminderTime(parsedReminder);
@@ -54,7 +57,7 @@ export default function setupReminder(
     session.send(
       `Ok, I will remind you daily about '${parsedReminder.message}' every ${weekDayToString(
         parsedReminder.schedule.weekday
-      )} at ${hour}:${minute}`
+      )} at ${timeDisplay(hour, minute)}`
     );
   } else if (schedule.recurrence === RecurrenceType.monthly) {
     const { hour, minute } = parseReminderTime(parsedReminder);
@@ -63,9 +66,35 @@ export default function setupReminder(
     const job = scheduleJob(bot, cron, session, parsedReminder);
     storeJob(mapToJobModel(job, parsedReminder, session), session);
     session.send(
-      `Ok, I will remind you every month on [${dayOfMonth}] at ${hour}:${minute} about '${
+      `Ok, I will remind you every month on [${dayOfMonth}] at ${timeDisplay(
+        hour,
+        minute
+      )} about '${parsedReminder.message}'`
+    );
+  } else if (schedule.recurrence === RecurrenceType.weekday) {
+    const { hour, minute } = parseReminderTime(parsedReminder);
+    const cron = generateCronExpression(minute, hour, '*', '*', [1, 2, 3, 4, 5]);
+    const job = scheduleJob(bot, cron, session, parsedReminder);
+    storeJob(mapToJobModel(job, parsedReminder, session), session);
+    session.send(
+      `Ok, I will remind you every weekday at ${timeDisplay(hour, minute)} about '${
         parsedReminder.message
       }'`
     );
+  } else {
+    session.send(
+      `Sorry I am missing code to satisfy that wish. Accepting PR's at https://github.com/vmishevski/teams-reminder-bot`
+    );
   }
+}
+
+function timeDisplay(hour: number, minute: number): string {
+  return `${padZero(hour)}:${padZero(minute)}`;
+}
+
+function padZero(n: number): string {
+  if (n < 10) {
+    return '0' + n;
+  }
+  return n.toString();
 }

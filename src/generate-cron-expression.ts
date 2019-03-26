@@ -1,9 +1,20 @@
+export type CronParam = number | number[] | '*';
+
 export default function generateCronExpression(
-  minute: number | '*',
-  hour: number | '*',
-  dayOfMonth: number | '*' = '*',
-  month: number | '*' = '*',
-  dayOfWeek: number | '*' = '*'
+  minute: CronParam,
+  hour: CronParam,
+  dayOfMonth: CronParam = '*',
+  month: CronParam = '*',
+  dayOfWeek: CronParam = '*'
 ): string {
-  return `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+  return `${joinIfArray(minute)} ${joinIfArray(hour)} ${joinIfArray(dayOfMonth)} ${joinIfArray(
+    month
+  )} ${joinIfArray(dayOfWeek)}`;
+}
+
+function joinIfArray(param: CronParam): string {
+  if (Array.isArray(param)) {
+    return param.join(',');
+  }
+  return param.toString();
 }

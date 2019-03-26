@@ -36,6 +36,7 @@ recurringSchedule
   / weekly _ "on" _ weekday:weekday _ time:time? { return { recurrence: "weekly", weekday, time }; }
   / monthly _ day:day _ time:time? { return { recurrence: "monthly", day, time }; }
   / monthly _ today:today { return { recurrence: "monthly", day: today.getDate() }; }
+  / everyWeekday _ time:time? { return { recurrence: "weekday", time }; }
 
 weekly
   = "weekly"
@@ -51,11 +52,10 @@ daily
   / "every day"
   / "each day"
 
-recurrence
-  = "daily"
-  / "weekly"
-  / "monthly"
-  / "yearly"
+everyWeekday
+  = "every" _ "weekday"
+  / "each" _ "weekday"
+  / "weekday"
 
 time
   = "at " hour:integer ":"? min:integer? { return {hour,min} }

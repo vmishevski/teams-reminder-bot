@@ -8,8 +8,6 @@ import parseMessage from './message-parser';
 import setupReminder from './setup-reminder';
 import JobModel from './job-model';
 
-const { addSeconds, getDate, startOfTomorrow } = require('date-fns');
-
 if (!config.has('bot.appId')) {
   // We are running locally; fix up the location of the config directory and re-intialize config
   process.env.NODE_CONFIG_DIR = '../config';
@@ -30,6 +28,10 @@ var inMemoryBotStorage = new builder.MemoryBotStorage();
 // Define a simple bot with the above connector that echoes what it received
 var bot = new builder.UniversalBot(connector, function(session) {
   var messageText = teams.TeamsMessage.getTextWithoutMentions(session.message);
+
+  console.log(
+    `received message on: ${session.message.timestamp}, local: ${session.message.localTimestamp}`
+  );
 
   if (messageText === 'list') {
     const reminderJobs: JobModel[] = session.userData.jobs || [];
