@@ -33,6 +33,8 @@ var bot = new builder.UniversalBot(connector, function(session) {
     `received message on: ${session.message.timestamp}, local: ${session.message.localTimestamp}`
   );
 
+  console.log(`offset ${new Date(session.message.localTimestamp).getTimezoneOffset()}`);
+
   if (messageText === 'list') {
     const reminderJobs: JobModel[] = session.userData.jobs || [];
 

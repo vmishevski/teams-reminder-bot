@@ -10,6 +10,8 @@ export default function scheduleJob(
   reminder: ParsedReminder
 ): Job {
   const job = scheduler.scheduleJob(cron, () => {
+    const address = { ...session.message.address };
+    delete address.conversation;
     bot.loadSession(session.message.address, (err, reminderSession) => {
       if (err) {
         console.error(err);
