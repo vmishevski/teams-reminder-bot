@@ -30,16 +30,20 @@ var bot = new builder.UniversalBot(connector, function(session) {
   var messageText = teams.TeamsMessage.getTextWithoutMentions(session.message);
 
   console.log(
-    `received message on: ${session.message.timestamp}, local: ${session.message.localTimestamp}`
+    `received message on: ${session.message.timestamp}, local: ${
+      session.message.localTimestamp
+    }\r\n`
   );
 
   console.log(
     `received message in channel '${session.message.address.channelId}' from user: '${
       session.message.address.user.id
-    }'`
+    }' \r\n`
   );
 
-  console.log(`offset ${new Date(session.message.localTimestamp).getTimezoneOffset()}`);
+  console.log(`entire message: ${JSON.stringify(session.message)}\r\n`);
+
+  console.log(`offset ${new Date(session.message.localTimestamp).getTimezoneOffset()}\r\n`);
 
   if (messageText === 'list') {
     const reminderJobs: JobModel[] = session.userData.jobs || [];
