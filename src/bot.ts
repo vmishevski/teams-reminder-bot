@@ -33,6 +33,12 @@ var bot = new builder.UniversalBot(connector, function(session) {
     `received message on: ${session.message.timestamp}, local: ${session.message.localTimestamp}`
   );
 
+  console.log(
+    `received message in channel '${session.message.address.channelId}' from user: '${
+      session.message.address.user.id
+    }'`
+  );
+
   console.log(`offset ${new Date(session.message.localTimestamp).getTimezoneOffset()}`);
 
   if (messageText === 'list') {
