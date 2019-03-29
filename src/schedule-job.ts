@@ -1,25 +1,25 @@
-import { Session, UniversalBot } from 'botbuilder';
-import { ParsedReminder } from './parsed-schedule';
-import { Job } from 'node-schedule';
+import { UniversalBot, Message, IAddress } from 'botbuilder';
 import * as scheduler from 'node-schedule';
+import * as teams from 'botbuilder-teams';
+import JobModel from './job-model';
 
+teams.TeamsMessage;
 export default function scheduleJob(
   bot: UniversalBot,
   cron: string | Date,
-  session: Session,
-  reminder: ParsedReminder
-): Job {
-  const job = scheduler.scheduleJob(cron, () => {
-    const address = { ...session.message.address };
-    delete address.conversation;
-    bot.loadSession(session.message.address, (err, reminderSession) => {
+  job: JobModel,
+  address: IAddress
+): void {
+  scheduler.scheduleJob(job.name, cron, () => {
+    bot.loadSession(address, (err, reminderSession) => {
       if (err) {
         console.error(err);
         return;
       }
-      reminderSession.send(reminder.message);
+
+      const message = new Message(reminderSession).address(address).text(job.reminder.message);
+
+      reminderSession.send(message);
     });
   });
-
-  return job;
 }

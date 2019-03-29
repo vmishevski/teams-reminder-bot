@@ -1,9 +1,10 @@
 import builder from 'botbuilder';
 import teamsBuilder from 'botbuilder-teams';
 import * as bot from './bot';
+import { connector } from './teams-connector';
 
 export const setup = function() {
-  bot.connector.onQuery('getRandomText', function(event, query, callback) {
+  connector.onQuery('getRandomText', function(event, query, callback) {
     var faker = require('faker');
 
     // If the user supplied a title via the cardTitle parameter then use it or use a fake title

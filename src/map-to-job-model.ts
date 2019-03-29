@@ -1,16 +1,12 @@
-import { Job } from 'node-schedule';
 import { ParsedReminder } from './parsed-schedule';
-import { Session } from 'botbuilder';
+import { IAddress } from 'botbuilder';
 import JobModel from './job-model';
+const uuid = require('uuid/v1');
 
-export default function mapToJobModel(
-  job: Job,
-  reminder: ParsedReminder,
-  session: Session
-): JobModel {
+export default function mapToJobModel(reminder: ParsedReminder, address: IAddress): JobModel {
   return {
-    name: job.name,
+    name: uuid(),
     reminder: reminder,
-    address: session.message.address,
+    address: address,
   };
 }
